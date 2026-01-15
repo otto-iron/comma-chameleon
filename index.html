@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comma Chameleon - Writing Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f0e8; color: #1a1a1a; }
+        .marquee { background: #1a1a1a; color: white; padding: 8px 0; overflow: hidden; white-space: nowrap; }
+        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; font-size: 12px; font-weight: bold; letter-spacing: 2px; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        header { position: sticky; top: 0; z-index: 50; background: #f5f0e8; border-bottom: 4px solid #1a1a1a; padding: 16px 24px; }
+        .header-content { max-width: 1100px; margin: 0 auto; }
+        .logo-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .logo { display: flex; align-items: center; gap: 16px; }
+        .logo-icon { width: 56px; height: 56px; background: linear-gradient(135deg, #ff6b35, #ff3366); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0 #1a1a1a; position: relative; }
+        .logo-icon::after { content: ''; position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1a1a; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.9); } }
+        .logo-text h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.05em; }
+        .logo-text h1 span { background: #1a1a1a; color: #ff6b35; padding: 0 8px; margin-left: 8px; }
+        .logo-text p { font-size: 11px; color: #ff6b35; letter-spacing: 3px; font-weight: bold; }
+        .time { font-family: monospace; color: #888; font-size: 12px; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tab { padding: 12px 20px; font-weight: 900; font-size: 13px; letter-spacing: 1px; border: 3px solid #1a1a1a; background: white; cursor: pointer; transition: all 0.15s; box-shadow: 4px 4px 0 #1a1a1a; }
+        .tab:hover, .tab.active { transform: translate(2px, 2px); box-shadow: none; }
+        .tab.active { background: #1a1a1a; color: white; }
+        .tab-num { font-family: monospace; color: #888; margin-right: 8px; }
+        .tab.active .tab-num { color: #ff6b35; }
+        main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .section-label { display: inline-block; background: #ff6b35; color: white; padding: 4px 12px; font-size: 11px; font-weight: bold; letter-spacing: 2px; margin-bottom: 16px; }
+        .section-title { font-size: 48px; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 32px; }
+        .section-title span { color: transparent; -webkit-text-stroke: 3px #1a1a1a; }
+        .card { background: white; border: 4px solid #1a1a1a; padding: 32px; margin-bottom: 24px; box-shadow: 6px 6px 0 #1a1a1a; }
+        .card.dark { background: #1a1a1a; color: white; box-shadow: 6px 6px 0 #ff6b35; }
+        .card-label { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: #ff6b35; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        textarea { width: 100%; padding: 16px; border: 4px solid #1a1a1a; background: transparent; font-family: inherit; font-size: 14px; resize: none; transition: background 0.3s; }
+        textarea:focus { outline: none; background: #fff5f0; }
+        label { font-weight: 900; font-size: 14px; display: block; margin-bottom: 12px; }
+        .hero-title { font-size: clamp(48px, 12vw, 120px); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 24px; }
+        .hero-title .outline { color: transparent; -webkit-text-stroke: 3px #1a1a1a; position: relative; display: inline-block; }
+        .hero-title .outline::after { content: attr(data-text); position: absolute; left: 6px; top: 6px; color: #ff6b35; -webkit-text-stroke: 0; z-index: -1; }
+        .btn { padding: 16px 32px; font-weight: 900; font-size: 14px; letter-spacing: 1px; border: 4px solid #1a1a1a; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: #1a1a1a; color: white; box-shadow: 0 0 30px rgba(255,107,53,0.4); }
+        .btn-primary:hover { background: #ff6b35; }
+        .btn-secondary { background: white; box-shadow: 6px 6px 0 #1a1a1a; }
+        .btn-secondary:hover { transform: translate(3px, 3px); box-shadow: none; }
+        .feature-card { padding: 32px; background: white; border: 4px solid #1a1a1a; box-shadow: 6px 6px 0 #1a1a1a; cursor: pointer; transition: all 0.2s; position: relative; }
+        .feature-card:hover { transform: translate(3px, 3px); box-shadow: none; }
+        .feature-card .num { position: absolute; top: -12px; right: -12px; background: #1a1a1a; color: white; padding: 4px 12px; font-family: monospace; font-size: 11px; }
+        .feature-card h3 { font-size: 48px; font-weight: 900; margin-bottom: 8px; }
+        .feature-card p { color: #888; font-size: 14px; }
+        .feature-card .arrow { position: absolute; bottom: 16px; right: 16px; width: 32px; height: 32px; border: 2px solid #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .feature-card:hover .arrow { background: #1a1a1a; color: white; }
+        footer { background: #1a1a1a; color: white; padding: 32px 24px; border-top: 4px solid #1a1a1a; }
+        footer .content { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        footer h2 { font-size: 24px; font-weight: 900; }
+        footer h2 span { color: #ff6b35; }
+        .badge { background: #ff6b35; color: white; padding: 4px 12px; font-size: 11px; font-weight: bold; }
+        .badge-green { background: #00ff88; color: #1a1a1a; }
+        .empty-state { text-align: center; padding: 64px; }
+        .empty-icon { width: 96px; height: 96px; margin: 0 auto 24px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 4px solid #ff6b35; }
+        .saved-toast { position: fixed; top: 20px; right: 20px; background: #00ff88; color: #1a1a1a; padding: 12px 24px; font-weight: 900; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0 #1a1a1a; display: none; z-index: 100; }
+        .toolbar { background: white; border: 4px solid #1a1a1a; padding: 16px; margin-bottom: 16px; box-shadow: 6px 6px 0 #1a1a1a; }
+        .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+        .toolbar-label { font-weight: 900; font-size: 11px; letter-spacing: 2px; }
+        .color-btn { width: 32px; height: 32px; border: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: #1a1a1a; transform: scale(1.25) rotate(12deg); }
+        .tool-btn { padding: 8px 16px; font-weight: 900; font-size: 12px; border: 3px solid #1a1a1a; background: white; cursor: pointer; transition: all 0.15s; }
+        .tool-btn:hover { background: #fff5f0; }
+        .tool-btn.active { background: #1a1a1a; color: white; }
+        .tool-btn.danger { background: #ff3366; color: white; border-color: #1a1a1a; }
+        .tool-btn.danger:hover { background: #ff1a4d; }
+        .stamp-btn { width: 40px; height: 40px; font-size: 20px; border: 3px solid #1a1a1a; background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .stamp-btn:hover { transform: scale(1.1); background: #fff5f0; }
+        .stamp-btn.active { border-color: #ff6b35; background: #fff5f0; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,107,53,0.5); }
+        .canvas-container { border: 4px solid #1a1a1a; background: #f5f0e8; box-shadow: 0 0 40px rgba(255,107,53,0.3); }
+        #canvas { width: 100%; height: 500px; cursor: crosshair; display: block; touch-action: none; }
+        #canvas.stamp-mode { cursor: cell; }
+        input[type="range"] { accent-color: #ff6b35; }
+        .stamps-section { border-top: 3px solid #1a1a1a; margin-top: 16px; padding-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="marquee">
+        <div class="marquee-content">
+            WRITE WITH SOUL ✦ FIND YOUR VOICE ✦ NO RULES ✦ JUST CREATE ✦ WRITE WITH SOUL ✦ FIND YOUR VOICE ✦ NO RULES ✦ JUST CREATE ✦ WRITE WITH SOUL ✦ FIND YOUR VOICE ✦ NO RULES ✦ JUST CREATE ✦ WRITE WITH SOUL ✦ FIND YOUR VOICE ✦ NO RULES ✦ JUST CREATE ✦
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <div class="logo-icon">🦎</div>
+                    <div class="logo-text">
+                        <h1>COMMA<span>CHAMELEON</span></h1>
+                        <p>WRITING STUDIO <span class="time" id="clock"></span></p>
+                    </div>
+                </div>
+                <div id="savedToast" class="saved-toast">✓ SAVED</div>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="showSection('home', this)"><span class="tab-num">01</span>HOME</button>
+                <button class="tab" onclick="showSection('progress', this)"><span class="tab-num">02</span>PROGRESS</button>
+                <button class="tab" onclick="showSection('archive', this)"><span class="tab-num">03</span>ARCHIVE</button>
+                <button class="tab" onclick="showSection('brief', this)"><span class="tab-num">04</span>BRIEF</button>
+                <button class="tab" onclick="showSection('studio', this)"><span class="tab-num">05</span>STUDIO</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="section active">
+            <div style="position: relative;">
+                <div style="position: absolute; left: -20px; top: 0; width: 80px; height: 80px; border: 4px solid #ff6b35; border-radius: 50%; opacity: 0.5;"></div>
+                <div style="position: absolute; right: 100px; top: 40px; width: 40px; height: 40px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1a1a;"></div>
+                
+                <span class="section-label" style="transform: rotate(-2deg); display: inline-block;">WELCOME TO THE</span>
+                <div class="hero-title">
+                    WRITING<br>
+                    <span class="outline" data-text="STUDIO">STUDIO</span>
+                </div>
+                <p style="font-size: 20px; max-width: 450px; color: #555; margin-bottom: 32px;">
+                    Find your voice. Build consistency. Write with soul.
+                    <span style="display: block; margin-top: 8px; font-weight: 900; color: #1a1a1a;">No fluff. No rules. Just work.</span>
+                </p>
+            </div>
+
+            <div class="grid-3" style="margin-bottom: 32px;">
+                <div class="feature-card" style="transform: rotate(-1deg);" onclick="showSection('progress', document.querySelectorAll('.tab')[1])">
+                    <span class="num">01</span>
+                    <h3 style="color: #ff6b35;">01</h3>
+                    <p style="font-size: 20px; font-weight: 900; color: #1a1a1a;">TRACK</p>
+                    <p>Monitor progress</p>
+                    <div class="arrow">→</div>
+                </div>
+                <div class="feature-card" style="transform: rotate(1deg);" onclick="showSection('brief', document.querySelectorAll('.tab')[3])">
+                    <span class="num">02</span>
+                    <h3 style="color: #00ff88;">02</h3>
+                    <p style="font-size: 20px; font-weight: 900; color: #1a1a1a;">CREATE</p>
+                    <p>Complete briefs</p>
+                    <div class="arrow">→</div>
+                </div>
+                <div class="feature-card" style="transform: rotate(-0.5deg);" onclick="showSection('studio', document.querySelectorAll('.tab')[4])">
+                    <span class="num">03</span>
+                    <h3 style="color: #ff3366;">03</h3>
+                    <p style="font-size: 20px; font-weight: 900; color: #1a1a1a;">PLAY</p>
+                    <p>Free your mind</p>
+                    <div class="arrow">→</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+                <button class="btn btn-primary" onclick="showSection('studio', document.querySelectorAll('.tab')[4])">Enter Studio →</button>
+                <button class="btn btn-secondary" onclick="showSection('progress', document.querySelectorAll('.tab')[1])">View Progress</button>
+                <span class="badge badge-green" style="transform: rotate(3deg);">✦ FREE FOREVER</span>
+            </div>
+        </section>
+
+        <section id="progress" class="section">
+            <span class="section-label">YOUR</span>
+            <h2 class="section-title">PROG<span>RESS</span></h2>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-label"><span style="width:10px;height:10px;background:#00ff88;border-radius:50%;animation:pulse 2s infinite;"></span>COMPLETED</div>
+                    <div style="padding: 12px; background: rgba(0,255,136,0.1); border: 2px solid #1a1a1a; margin-bottom: 12px; display: flex; align-items: center; gap: 16px;">
+                        <span style="width:40px;height:40px;background:#1a1a1a;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;">✓</span>
+                        <span style="font-weight: 600;">Bio & Voice Discovery</span>
+                    </div>
+                    <div style="padding: 12px; background: rgba(0,255,136,0.1); border: 2px solid #1a1a1a; display: flex; align-items: center; gap: 16px;">
+                        <span style="width:40px;height:40px;background:#1a1a1a;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;">✓</span>
+                        <span style="font-weight: 600;">Finding Your Voice</span>
+                    </div>
+                </div>
+                <div class="card dark">
+                    <div class="card-label"><span style="width:10px;height:10px;background:#ff6b35;border-radius:50%;animation:pulse 2s infinite;"></span>IN PROGRESS</div>
+                    <div style="padding: 12px; border: 2px solid #ff6b35; display: flex; align-items: center; gap: 16px;">
+                        <span style="width:40px;height:40px;border:2px solid #ff6b35;color:#ff6b35;display:flex;align-items:center;justify-content:center;font-weight:bold;">→</span>
+                        <span style="font-weight: 600;">Current Assignment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">REFLECTIONS</div>
+                <div class="grid-2">
+                    <div>
+                        <label>What feels different about your writing now?</label>
+                        <textarea rows="4" placeholder="Write here..." oninput="saveData()"></textarea>
+                    </div>
+                    <div>
+                        <label>What's still hard?</label>
+                        <textarea rows="4" placeholder="Write here..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="archive" class="section">
+            <span class="section-label">YOUR</span>
+            <h2 class="section-title">ARC<span>HIVE</span></h2>
+            <div class="card">
+                <div class="empty-state">
+                    <div class="empty-icon">📁</div>
+                    <p style="font-weight: 900; font-size: 20px; margin-bottom: 8px;">EMPTY</p>
+                    <p style="color: #888;">Your work will appear here</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="brief" class="section">
+            <span class="section-label">CURRENT</span>
+            <h2 class="section-title">BRI<span>EF</span></h2>
+            <div class="card dark">
+                <div class="empty-state">
+                    <div class="empty-icon" style="background: #ff6b35;
